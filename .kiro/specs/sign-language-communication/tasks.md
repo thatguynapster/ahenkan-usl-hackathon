@@ -145,8 +145,9 @@
     -   Test error message display
     -   _Requirements: 2.2, 3.3_
 
--   [ ] 11. Implement speech-to-text service
--   [ ] 11.1 Create SpeechToTextService interface and implementation
+-   [x] 11. Implement speech-to-text service
+
+-   [x] 11.1 Create SpeechToTextService interface and implementation
 
     -   Initialize speech recognition with language support
     -   Implement startListening method
@@ -155,7 +156,7 @@
     -   Return transcribed text
     -   _Requirements: 4.3, 4.4_
 
--   [ ] 11.2 Write unit tests for SpeechToTextService
+-   [x] 11.2 Write unit tests for SpeechToTextService
 
     -   Test speech recognition initialization
     -   Test listening start and stop
