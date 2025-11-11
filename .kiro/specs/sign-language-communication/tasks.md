@@ -163,8 +163,9 @@
     -   Test permission handling
     -   _Requirements: 4.3_
 
--   [ ] 12. Implement sign language generation service
--   [ ] 12.1 Create SignLanguageGenerationService interface and mock implementation
+-   [x] 12. Implement sign language generation service
+
+-   [x] 12.1 Create SignLanguageGenerationService interface and mock implementation
 
     -   Define generateSignVideo method that accepts text and language
     -   Create mock implementation that returns sample video paths for testing
@@ -172,7 +173,7 @@
     -   Ensure minimum 24 fps for generated videos
     -   _Requirements: 5.1, 5.2, 5.4, 5.5_
 
--   [ ] 12.2 Write unit tests for generation service
+-   [x] 12.2 Write unit tests for generation service
 
     -   Test video generation with different languages
     -   Test timeout scenarios
