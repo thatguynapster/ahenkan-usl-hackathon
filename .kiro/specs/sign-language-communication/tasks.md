@@ -66,7 +66,7 @@
     -   _Requirements: 1.1, 1.4, 8.1, 8.2_
 
 -   [ ] 7. Implement video recording service
--   [ ] 7.1 Create VideoRecordingService interface and implementation
+-   [x] 7.1 Create VideoRecordingService interface and implementation
 
     -   Initialize camera controller with appropriate resolution
     -   Implement startRecording method
