@@ -57,7 +57,7 @@
     -   Test initial language loading
     -   _Requirements: 1.1, 1.2_
 
--   [ ] 6. Create language selector widget
+-   [x] 6. Create language selector widget
 
     -   Build LanguageSelectorWidget with dropdown UI
     -   Connect widget to LanguageManagerBloc
