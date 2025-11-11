@@ -180,8 +180,9 @@
     -   Test frame rate validation
     -   _Requirements: 5.1, 5.2, 5.5_
 
--   [ ] 13. Implement TextToSignGenerator BLoC
--   [ ] 13.1 Create TextToSignGeneratorBloc with states and events
+-   [x] 13. Implement TextToSignGenerator BLoC
+
+-   [x] 13.1 Create TextToSignGeneratorBloc with states and events
 
     -   Define all states (Initial, Processing, Success, Error)
     -   Define all events (GenerateFromText, GenerateFromSpeech, ReplayVideo, ClearGeneration)
@@ -189,7 +190,7 @@
     -   Validate text input length (500 characters max)
     -   _Requirements: 4.2, 4.3, 4.4, 4.5, 5.1, 5.2_
 
--   [ ] 13.2 Write unit tests for TextToSignGeneratorBloc
+-   [x] 13.2 Write unit tests for TextToSignGeneratorBloc
 
     -   Test text-to-sign generation flow
     -   Test speech-to-sign generation flow
