@@ -8,7 +8,7 @@
     -   Set up project folder structure (features, core, data, domain layers)
     -   _Requirements: 8.1, 8.5_
 
--   [ ] 2. Implement core data models and enums
+-   [x] 2. Implement core data models and enums
 
     -   Create Language enum with display names and language codes
     -   Create MessageType enum for sign-to-text and text-to-sign
