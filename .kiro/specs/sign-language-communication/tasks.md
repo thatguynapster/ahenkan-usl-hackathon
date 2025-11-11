@@ -41,15 +41,16 @@
     -   Test error scenarios
     -   _Requirements: 1.2_
 
--   [ ] 5. Implement LanguageManager BLoC
--   [ ] 5.1 Create LanguageManagerBloc with states and events
+-   [x] 5. Implement LanguageManager BLoC
+
+-   [x] 5.1 Create LanguageManagerBloc with states and events
 
     -   Define LanguageSelected state
     -   Define SelectLanguage and LoadSavedLanguage events
     -   Implement event handlers using StorageRepository
     -   _Requirements: 1.1, 1.2, 1.3_
 
--   [ ] 5.2 Write unit tests for LanguageManagerBloc
+-   [x] 5.2 Write unit tests for LanguageManagerBloc
 
     -   Test language selection flow
     -   Test language persistence
