@@ -116,8 +116,9 @@
     -   Test state transitions
     -   _Requirements: 2.2, 3.3, 3.4_
 
--   [ ] 10. Build Sign-to-Text screen UI
--   [ ] 10.1 Create SignToTextScreen widget structure
+-   [x] 10. Build Sign-to-Text screen UI
+
+-   [x] 10.1 Create SignToTextScreen widget structure
 
     -   Build app bar with title and language selector
     -   Create camera preview widget area
@@ -127,7 +128,7 @@
     -   Style according to UI mockups
     -   _Requirements: 2.1, 2.2, 2.3, 2.4, 2.5, 8.1, 8.2, 8.3_
 
--   [ ] 10.2 Connect Sign-to-Text screen to SignLanguageInterpreterBloc
+-   [x] 10.2 Connect Sign-to-Text screen to SignLanguageInterpreterBloc
 
     -   Wire up recording button to start/stop events
     -   Display camera preview during recording
@@ -137,7 +138,7 @@
     -   Implement visual feedback for user interactions
     -   _Requirements: 2.2, 2.3, 2.4, 3.3, 3.4, 3.5, 8.2_
 
--   [ ] 10.3 Write widget tests for Sign-to-Text screen
+-   [x] 10.3 Write widget tests for Sign-to-Text screen
 
     -   Test recording button interaction
     -   Test interpretation display

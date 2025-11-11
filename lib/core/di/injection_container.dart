@@ -7,6 +7,7 @@ import '../../domain/repositories/storage_repository.dart';
 import '../../domain/services/sign_language_interpretation_service.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../../presentation/bloc/language_manager/language_manager_bloc.dart';
+import '../../presentation/bloc/sign_language_interpreter/sign_language_interpreter_bloc.dart';
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -46,12 +47,6 @@ Future<void> initializeDependencies() async {
   // ========== BLoCs ==========
   // Register BLoC instances as factories (new instance each time)
   sl.registerFactory(() => LanguageManagerBloc(storageRepository: sl()));
-  // sl.registerFactory(
-  //   () => SignLanguageInterpreterBloc(
-  //     videoRecordingService: sl(),
-  //     interpretationService: sl(),
-  //   ),
-  // );
   // sl.registerFactory(
   //   () => TextToSignGeneratorBloc(
   //     generationService: sl(),

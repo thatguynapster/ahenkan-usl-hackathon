@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:camera/camera.dart';
+import 'package:permission_handler/permission_handler.dart';
 import '../../core/error/app_error.dart';
 import '../../core/utils/enums.dart';
 import '../../domain/services/video_recording_service.dart';
@@ -20,6 +21,30 @@ class VideoRecordingServiceImpl implements VideoRecordingService {
   @override
   Future<AppError?> initialize() async {
     try {
+      // Request camera and microphone permissions
+      final cameraStatus = await Permission.camera.request();
+      final microphoneStatus = await Permission.microphone.request();
+
+      if (cameraStatus.isDenied || cameraStatus.isPermanentlyDenied) {
+        return AppError(
+          type: ErrorType.camera,
+          message: 'Camera permission denied',
+          userFriendlyMessage:
+              'Camera permission is required. Please enable it in Settings > Apps > Ahenkan > Permissions.',
+          isRecoverable: false,
+        );
+      }
+
+      if (microphoneStatus.isDenied || microphoneStatus.isPermanentlyDenied) {
+        return AppError(
+          type: ErrorType.camera,
+          message: 'Microphone permission denied',
+          userFriendlyMessage:
+              'Microphone permission is required for camera access. Please enable it in Settings > Apps > Ahenkan > Permissions.',
+          isRecoverable: false,
+        );
+      }
+
       // Get available cameras
       _cameras = await availableCameras();
 
@@ -28,7 +53,7 @@ class VideoRecordingServiceImpl implements VideoRecordingService {
           type: ErrorType.camera,
           message: 'No cameras available on device',
           userFriendlyMessage:
-              'No camera found on your device. Please check your device settings.',
+              'No camera found. If using an emulator, make sure camera emulation is enabled in AVD settings.',
           isRecoverable: false,
         );
       }
@@ -64,7 +89,7 @@ class VideoRecordingServiceImpl implements VideoRecordingService {
         type: ErrorType.camera,
         message: 'Failed to initialize camera: $e',
         userFriendlyMessage:
-            'Could not access the camera. Please check your permissions and try again.',
+            'Could not access the camera. Error: ${e.toString()}. Please check permissions or enable camera in emulator settings.',
         isRecoverable: true,
       );
     }
