@@ -75,7 +75,7 @@
     -   Handle camera permissions and errors
     -   _Requirements: 2.1, 2.2, 2.5_
 
--   [ ] 7.2 Write unit tests for VideoRecordingService
+-   [x] 7.2 Write unit tests for VideoRecordingService
 
     -   Test camera initialization
     -   Test recording start and stop
