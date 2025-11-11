@@ -25,15 +25,16 @@
     -   Create initialization function for dependency setup
     -   _Requirements: 8.2_
 
--   [ ] 4. Implement storage repository and language persistence
--   [ ] 4.1 Create StorageRepository interface and implementation
+-   [x] 4. Implement storage repository and language persistence
+
+-   [x] 4.1 Create StorageRepository interface and implementation
 
     -   Implement methods for saving and retrieving language preference using shared_preferences
     -   Implement methods for video file management using path_provider
     -   Add error handling for storage operations
     -   _Requirements: 1.2, 5.1_
 
--   [ ] 4.2 Write unit tests for StorageRepository
+-   [x] 4.2 Write unit tests for StorageRepository
 
     -   Test language preference save and retrieve
     -   Test video file operations

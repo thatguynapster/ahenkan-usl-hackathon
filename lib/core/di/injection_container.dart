@@ -1,4 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../data/repositories/storage_repository_impl.dart';
+import '../../domain/repositories/storage_repository.dart';
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -8,16 +11,17 @@ final sl = GetIt.instance;
 Future<void> initializeDependencies() async {
   // ========== External Dependencies ==========
   // Register external packages that need initialization
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
 
   // ========== Data Sources ==========
   // Register data sources (local storage, remote APIs, etc.)
 
   // ========== Repositories ==========
   // Register repository implementations
-  // Example:
-  // sl.registerLazySingleton<StorageRepository>(
-  //   () => StorageRepositoryImpl(sharedPreferences: sl()),
-  // );
+  sl.registerLazySingleton<StorageRepository>(
+    () => StorageRepositoryImpl(sl()),
+  );
 
   // ========== Services ==========
   // Register service implementations
