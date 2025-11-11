@@ -18,7 +18,7 @@
     -   Create AppConfiguration class with constants
     -   _Requirements: 1.1, 7.2_
 
--   [ ] 3. Set up dependency injection and service locator
+-   [x] 3. Set up dependency injection and service locator
 
     -   Configure get_it service locator
     -   Register all services, repositories, and BLoCs

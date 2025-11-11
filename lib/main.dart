@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'core/di/injection_container.dart' as di;
 
-void main() {
+void main() async {
+  // Ensure Flutter binding is initialized
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize dependency injection
+  await di.initializeDependencies();
+
   runApp(const MyApp());
 }
 

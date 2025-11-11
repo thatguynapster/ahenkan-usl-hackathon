@@ -1,0 +1,65 @@
+import 'package:get_it/get_it.dart';
+
+/// Global service locator instance
+final sl = GetIt.instance;
+
+/// Initialize all dependencies
+/// This function should be called before runApp() in main.dart
+Future<void> initializeDependencies() async {
+  // ========== External Dependencies ==========
+  // Register external packages that need initialization
+
+  // ========== Data Sources ==========
+  // Register data sources (local storage, remote APIs, etc.)
+
+  // ========== Repositories ==========
+  // Register repository implementations
+  // Example:
+  // sl.registerLazySingleton<StorageRepository>(
+  //   () => StorageRepositoryImpl(sharedPreferences: sl()),
+  // );
+
+  // ========== Services ==========
+  // Register service implementations
+  // Example:
+  // sl.registerLazySingleton<VideoRecordingService>(
+  //   () => VideoRecordingServiceImpl(),
+  // );
+  // sl.registerLazySingleton<SignLanguageInterpretationService>(
+  //   () => SignLanguageInterpretationServiceImpl(mlRepository: sl()),
+  // );
+  // sl.registerLazySingleton<SignLanguageGenerationService>(
+  //   () => SignLanguageGenerationServiceImpl(mlRepository: sl()),
+  // );
+  // sl.registerLazySingleton<SpeechToTextService>(
+  //   () => SpeechToTextServiceImpl(),
+  // );
+
+  // ========== BLoCs ==========
+  // Register BLoC instances as factories (new instance each time)
+  // Example:
+  // sl.registerFactory(
+  //   () => LanguageManagerBloc(storageRepository: sl()),
+  // );
+  // sl.registerFactory(
+  //   () => SignLanguageInterpreterBloc(
+  //     videoRecordingService: sl(),
+  //     interpretationService: sl(),
+  //   ),
+  // );
+  // sl.registerFactory(
+  //   () => TextToSignGeneratorBloc(
+  //     generationService: sl(),
+  //     speechToTextService: sl(),
+  //   ),
+  // );
+  // sl.registerFactory(
+  //   () => SessionManagerBloc(),
+  // );
+}
+
+/// Reset all registered dependencies
+/// Useful for testing
+Future<void> resetDependencies() async {
+  await sl.reset();
+}
