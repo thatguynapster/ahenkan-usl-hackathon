@@ -1,8 +1,10 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/repositories/storage_repository_impl.dart';
+import '../../data/services/sign_language_interpretation_service_impl.dart';
 import '../../data/services/video_recording_service_impl.dart';
 import '../../domain/repositories/storage_repository.dart';
+import '../../domain/services/sign_language_interpretation_service.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../../presentation/bloc/language_manager/language_manager_bloc.dart';
 
@@ -31,9 +33,9 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<VideoRecordingService>(
     () => VideoRecordingServiceImpl(),
   );
-  // sl.registerLazySingleton<SignLanguageInterpretationService>(
-  //   () => SignLanguageInterpretationServiceImpl(mlRepository: sl()),
-  // );
+  sl.registerLazySingleton<SignLanguageInterpretationService>(
+    () => SignLanguageInterpretationServiceImpl(),
+  );
   // sl.registerLazySingleton<SignLanguageGenerationService>(
   //   () => SignLanguageGenerationServiceImpl(mlRepository: sl()),
   // );
