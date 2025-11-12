@@ -246,8 +246,9 @@
     -   Test chronological ordering
     -   _Requirements: 7.1, 7.2, 7.4_
 
--   [ ] 16. Build History screen UI
--   [ ] 16.1 Create HistoryScreen widget
+-   [x] 16. Build History screen UI
+
+-   [x] 16.1 Create HistoryScreen widget
 
     -   Build app bar with title
     -   Create scrollable list view for messages
@@ -258,14 +259,14 @@
     -   Style for readability and accessibility
     -   _Requirements: 7.3, 7.5, 8.1, 8.3_
 
--   [ ] 16.2 Connect History screen to SessionManagerBloc
+-   [x] 16.2 Connect History screen to SessionManagerBloc
 
     -   Load and display session history
     -   Update UI when new messages are added
     -   Handle empty state when no messages exist
     -   _Requirements: 7.1, 7.3, 7.5_
 
--   [ ] 16.3 Write widget tests for History screen
+-   [x] 16.3 Write widget tests for History screen
 
     -   Test message list display
     -   Test empty state
