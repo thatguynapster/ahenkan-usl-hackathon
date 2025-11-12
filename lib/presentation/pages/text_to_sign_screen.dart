@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import '../../core/di/injection_container.dart';
+import '../../core/utils/accessibility_utils.dart';
 import '../../core/utils/app_configuration.dart';
 import '../../core/utils/enums.dart';
 import '../../domain/entities/message.dart';
@@ -234,47 +235,58 @@ class _TextInputAreaState extends State<_TextInputArea> {
                       builder: (context, state) {
                         final isProcessing = state is GeneratorProcessing;
 
-                        return ElevatedButton(
-                          onPressed:
-                              isProcessing || _textController.text.isEmpty
-                              ? null
-                              : () {
-                                  context.read<TextToSignGeneratorBloc>().add(
-                                    GenerateFromText(_textController.text),
-                                  );
-                                },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(
-                              context,
-                            ).colorScheme.primary,
-                            foregroundColor: Colors.white,
-                            padding: const EdgeInsets.symmetric(vertical: 16.0),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12.0),
+                        return Semantics(
+                          label: 'Generate sign language video from text',
+                          button: true,
+                          enabled:
+                              !isProcessing && _textController.text.isNotEmpty,
+                          child: ElevatedButton(
+                            onPressed:
+                                isProcessing || _textController.text.isEmpty
+                                ? null
+                                : () async {
+                                    await AccessibilityUtils.provideHapticFeedback(
+                                      type: HapticFeedbackType.medium,
+                                    );
+                                    context.read<TextToSignGeneratorBloc>().add(
+                                      GenerateFromText(_textController.text),
+                                    );
+                                  },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Theme.of(
+                                context,
+                              ).colorScheme.primary,
+                              foregroundColor: Colors.white,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: 16.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12.0),
+                              ),
+                              minimumSize: const Size(
+                                AppConfiguration.minTouchTargetSize,
+                                AppConfiguration.minTouchTargetSize,
+                              ),
                             ),
-                            minimumSize: const Size(
-                              AppConfiguration.minTouchTargetSize,
-                              AppConfiguration.minTouchTargetSize,
-                            ),
-                          ),
-                          child: isProcessing
-                              ? const SizedBox(
-                                  width: 20.0,
-                                  height: 20.0,
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 2.0,
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      Colors.white,
+                            child: isProcessing
+                                ? const SizedBox(
+                                    width: 20.0,
+                                    height: 20.0,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 2.0,
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                : const Text(
+                                    'Generate Sign Language',
+                                    style: TextStyle(
+                                      fontSize: 16.0,
+                                      fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                )
-                              : const Text(
-                                  'Generate Sign Language',
-                                  style: TextStyle(
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
+                          ),
                         );
                       },
                     ),
@@ -297,46 +309,56 @@ class _MicrophoneButton extends StatelessWidget {
         final isListening = state is GeneratorListening;
         final isDisabled = isProcessing || isListening;
 
-        return Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: isDisabled
-                ? null
-                : () {
-                    context.read<TextToSignGeneratorBloc>().add(
-                      const GenerateFromSpeech(),
-                    );
-                  },
-            borderRadius: BorderRadius.circular(12.0),
-            child: Container(
-              width: AppConfiguration.minTouchTargetSize,
-              height: AppConfiguration.minTouchTargetSize,
-              decoration: BoxDecoration(
-                color: isDisabled
-                    ? Colors.grey.withValues(alpha: 0.3)
-                    : isListening
-                    ? Colors.red.withValues(alpha: 0.1)
-                    : Theme.of(
-                        context,
-                      ).colorScheme.primary.withValues(alpha: 0.1),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
+        return Semantics(
+          label: isListening
+              ? 'Listening to speech'
+              : 'Use voice input to generate sign language',
+          button: true,
+          enabled: !isDisabled,
+          child: Material(
+            color: Colors.transparent,
+            child: InkWell(
+              onTap: isDisabled
+                  ? null
+                  : () async {
+                      await AccessibilityUtils.provideHapticFeedback(
+                        type: HapticFeedbackType.medium,
+                      );
+                      context.read<TextToSignGeneratorBloc>().add(
+                        const GenerateFromSpeech(),
+                      );
+                    },
+              borderRadius: BorderRadius.circular(12.0),
+              child: Container(
+                width: AppConfiguration.minTouchTargetSize,
+                height: AppConfiguration.minTouchTargetSize,
+                decoration: BoxDecoration(
+                  color: isDisabled
+                      ? Colors.grey.withValues(alpha: 0.3)
+                      : isListening
+                      ? Colors.red.withValues(alpha: 0.1)
+                      : Theme.of(
+                          context,
+                        ).colorScheme.primary.withValues(alpha: 0.1),
+                  borderRadius: BorderRadius.circular(12.0),
+                  border: Border.all(
+                    color: isDisabled
+                        ? Colors.grey
+                        : isListening
+                        ? Colors.red
+                        : Theme.of(context).colorScheme.primary,
+                    width: 2.0,
+                  ),
+                ),
+                child: Icon(
+                  Icons.mic,
                   color: isDisabled
                       ? Colors.grey
                       : isListening
                       ? Colors.red
                       : Theme.of(context).colorScheme.primary,
-                  width: 2.0,
+                  size: 24.0,
                 ),
-              ),
-              child: Icon(
-                Icons.mic,
-                color: isDisabled
-                    ? Colors.grey
-                    : isListening
-                    ? Colors.red
-                    : Theme.of(context).colorScheme.primary,
-                size: 24.0,
               ),
             ),
           ),
@@ -659,34 +681,52 @@ class _VideoControlsState extends State<_VideoControls> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Play/Pause button
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    if (isPlaying) {
-                      widget.controller.pause();
-                    } else {
-                      widget.controller.play();
-                    }
-                  });
-                },
-                icon: Icon(
-                  isPlaying ? Icons.pause : Icons.play_arrow,
-                  color: Colors.white,
-                  size: 32.0,
+              Semantics(
+                label: isPlaying ? 'Pause video' : 'Play video',
+                button: true,
+                child: IconButton(
+                  onPressed: () async {
+                    await AccessibilityUtils.provideHapticFeedback(
+                      type: HapticFeedbackType.light,
+                    );
+                    setState(() {
+                      if (isPlaying) {
+                        widget.controller.pause();
+                      } else {
+                        widget.controller.play();
+                      }
+                    });
+                  },
+                  icon: Icon(
+                    isPlaying ? Icons.pause : Icons.play_arrow,
+                    color: Colors.white,
+                    size: 32.0,
+                  ),
+                  iconSize: AppConfiguration.minTouchTargetSize,
                 ),
-                iconSize: AppConfiguration.minTouchTargetSize,
               ),
 
               const SizedBox(width: 16.0),
 
               // Replay button
-              IconButton(
-                onPressed: () {
-                  widget.controller.seekTo(Duration.zero);
-                  widget.controller.play();
-                },
-                icon: const Icon(Icons.replay, color: Colors.white, size: 32.0),
-                iconSize: AppConfiguration.minTouchTargetSize,
+              Semantics(
+                label: 'Replay video from beginning',
+                button: true,
+                child: IconButton(
+                  onPressed: () async {
+                    await AccessibilityUtils.provideHapticFeedback(
+                      type: HapticFeedbackType.light,
+                    );
+                    widget.controller.seekTo(Duration.zero);
+                    widget.controller.play();
+                  },
+                  icon: const Icon(
+                    Icons.replay,
+                    color: Colors.white,
+                    size: 32.0,
+                  ),
+                  iconSize: AppConfiguration.minTouchTargetSize,
+                ),
               ),
 
               const SizedBox(width: 16.0),

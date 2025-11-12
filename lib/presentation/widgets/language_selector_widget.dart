@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../core/utils/accessibility_utils.dart';
 import '../../core/utils/enums.dart';
 import '../bloc/language_manager/language_manager_bloc.dart';
 import '../bloc/language_manager/language_manager_event.dart';
@@ -38,8 +39,11 @@ class LanguageSelectorWidget extends StatelessWidget {
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 16.0,
               ),
-              onChanged: (Language? newLanguage) {
+              onChanged: (Language? newLanguage) async {
                 if (newLanguage != null) {
+                  await AccessibilityUtils.provideHapticFeedback(
+                    type: HapticFeedbackType.selection,
+                  );
                   context.read<LanguageManagerBloc>().add(
                     SelectLanguage(newLanguage),
                   );

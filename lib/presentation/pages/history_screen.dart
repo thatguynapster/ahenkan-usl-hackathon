@@ -5,6 +5,7 @@ import '../../domain/entities/message.dart';
 import '../bloc/session_manager/session_manager_bloc.dart';
 import '../bloc/session_manager/session_manager_event.dart';
 import '../bloc/session_manager/session_manager_state.dart';
+import '../widgets/loading_skeleton.dart';
 
 /// Screen for displaying session history of communication exchanges
 class HistoryScreen extends StatelessWidget {

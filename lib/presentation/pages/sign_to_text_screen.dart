@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:camera/camera.dart';
 import '../../core/di/injection_container.dart';
+import '../../core/utils/accessibility_utils.dart';
+import '../../core/utils/app_configuration.dart';
 import '../../core/utils/enums.dart';
 import '../../data/services/video_recording_service_impl.dart';
 import '../../domain/entities/message.dart';
@@ -367,7 +369,36 @@ class _RecordingStatusIndicatorState extends State<_RecordingStatusIndicator>
 }
 
 /// Circular recording control button
-class _RecordingControlButton extends StatelessWidget {
+class _RecordingControlButton extends StatefulWidget {
+  @override
+  State<_RecordingControlButton> createState() =>
+      _RecordingControlButtonState();
+}
+
+class _RecordingControlButtonState extends State<_RecordingControlButton>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: AppConfiguration.animationDuration,
+      vsync: this,
+    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 0.95,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeInOut));
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<
@@ -379,46 +410,62 @@ class _RecordingControlButton extends StatelessWidget {
         final isProcessing = state is InterpreterProcessing;
         final isDisabled = isProcessing;
 
-        return GestureDetector(
-          onTap: isDisabled
-              ? null
-              : () {
-                  if (isRecording) {
-                    context.read<SignLanguageInterpreterBloc>().add(
-                      const StopRecording(),
+        return Semantics(
+          label: isRecording
+              ? 'Stop recording sign language'
+              : 'Start recording sign language',
+          button: true,
+          enabled: !isDisabled,
+          child: GestureDetector(
+            onTapDown: (_) => _controller.forward(),
+            onTapUp: (_) => _controller.reverse(),
+            onTapCancel: () => _controller.reverse(),
+            onTap: isDisabled
+                ? null
+                : () async {
+                    await AccessibilityUtils.provideHapticFeedback(
+                      type: HapticFeedbackType.heavy,
                     );
-                  } else {
-                    context.read<SignLanguageInterpreterBloc>().add(
-                      const StartRecording(),
-                    );
-                  }
-                },
-          child: Container(
-            width: 80.0,
-            height: 80.0,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: isDisabled
-                  ? Colors.grey
-                  : (isRecording
-                        ? Colors.red
-                        : Theme.of(context).colorScheme.primary),
-              boxShadow: [
-                BoxShadow(
-                  color:
-                      (isRecording
-                              ? Colors.red
-                              : Theme.of(context).colorScheme.primary)
-                          .withOpacity(0.3),
-                  blurRadius: 12.0,
-                  spreadRadius: 2.0,
+                    if (isRecording) {
+                      context.read<SignLanguageInterpreterBloc>().add(
+                        const StopRecording(),
+                      );
+                    } else {
+                      context.read<SignLanguageInterpreterBloc>().add(
+                        const StartRecording(),
+                      );
+                    }
+                  },
+            child: ScaleTransition(
+              scale: _scaleAnimation,
+              child: Container(
+                width: 80.0,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isDisabled
+                      ? Colors.grey
+                      : (isRecording
+                            ? Colors.red
+                            : Theme.of(context).colorScheme.primary),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          (isRecording
+                                  ? Colors.red
+                                  : Theme.of(context).colorScheme.primary)
+                              .withValues(alpha: 0.3),
+                      blurRadius: 12.0,
+                      spreadRadius: 2.0,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            child: Icon(
-              isRecording ? Icons.stop : Icons.videocam,
-              color: Colors.white,
-              size: 40.0,
+                child: Icon(
+                  isRecording ? Icons.stop : Icons.videocam,
+                  color: Colors.white,
+                  size: 40.0,
+                ),
+              ),
             ),
           ),
         );

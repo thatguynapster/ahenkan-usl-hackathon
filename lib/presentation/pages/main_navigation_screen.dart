@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../core/di/injection_container.dart';
+import '../../core/utils/accessibility_utils.dart';
+import '../../core/utils/app_configuration.dart';
 import '../bloc/language_manager/language_manager_bloc.dart';
 import '../bloc/language_manager/language_manager_event.dart';
 import '../bloc/session_manager/session_manager_bloc.dart';
@@ -42,7 +44,24 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         BlocProvider(create: (context) => sl<SessionManagerBloc>()),
       ],
       child: Scaffold(
-        body: IndexedStack(index: _currentIndex, children: _screens),
+        body: AnimatedSwitcher(
+          duration: AppConfiguration.animationDuration,
+          switchInCurve: Curves.easeInOut,
+          switchOutCurve: Curves.easeInOut,
+          transitionBuilder: (Widget child, Animation<double> animation) {
+            return FadeTransition(
+              opacity: animation,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: const Offset(0.1, 0),
+                  end: Offset.zero,
+                ).animate(animation),
+                child: child,
+              ),
+            );
+          },
+          child: _screens[_currentIndex],
+        ),
         bottomNavigationBar: BottomNavigationBar(
           currentIndex: _currentIndex,
           onTap: _onTabTapped,
@@ -53,18 +72,23 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
           ).colorScheme.onSurface.withValues(alpha: 0.6),
           selectedFontSize: 14.0,
           unselectedFontSize: 12.0,
+          // Ensure minimum touch target size
+          iconSize: 28.0,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.sign_language),
               label: 'Sign to Text',
+              tooltip: 'Record sign language and convert to text',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.text_fields),
               label: 'Text to Sign',
+              tooltip: 'Convert text or speech to sign language',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.history),
               label: 'History',
+              tooltip: 'View communication history',
             ),
           ],
         ),
@@ -72,7 +96,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     );
   }
 
-  void _onTabTapped(int index) {
+  void _onTabTapped(int index) async {
+    // Provide haptic feedback for navigation
+    await AccessibilityUtils.provideHapticFeedback(
+      type: HapticFeedbackType.selection,
+    );
+
     setState(() {
       _currentIndex = index;
     });
