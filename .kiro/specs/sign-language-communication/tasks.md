@@ -198,8 +198,9 @@
     -   Test state transitions
     -   _Requirements: 4.2, 4.5, 5.1_
 
--   [ ] 14. Build Text-to-Sign screen UI
--   [ ] 14.1 Create TextToSignScreen widget structure
+-   [x] 14. Build Text-to-Sign screen UI
+
+-   [x] 14.1 Create TextToSignScreen widget structure
 
     -   Build app bar with title and language selector
     -   Create text input field with placeholder and character counter
@@ -209,7 +210,7 @@
     -   Style according to UI mockups
     -   _Requirements: 4.1, 4.2, 5.3, 8.1, 8.2, 8.3_
 
--   [ ] 14.2 Connect Text-to-Sign screen to TextToSignGeneratorBloc
+-   [x] 14.2 Connect Text-to-Sign screen to TextToSignGeneratorBloc
 
     -   Wire up text input to generation event
     -   Wire up microphone button to speech input
@@ -220,7 +221,7 @@
     -   Implement visual feedback for user interactions
     -   _Requirements: 4.2, 4.3, 5.1, 5.2, 5.3, 8.2_
 
--   [ ] 14.3 Write widget tests for Text-to-Sign screen
+-   [x] 14.3 Write widget tests for Text-to-Sign screen
 
     -   Test text input and generation
     -   Test voice input button

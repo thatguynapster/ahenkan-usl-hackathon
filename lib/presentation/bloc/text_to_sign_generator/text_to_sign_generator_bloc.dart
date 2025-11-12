@@ -92,8 +92,8 @@ class TextToSignGeneratorBloc
       }
     }
 
-    // Emit processing state (listening for speech)
-    emit(const GeneratorProcessing());
+    // Emit listening state
+    emit(const GeneratorListening());
 
     // Start listening for speech
     final (transcribedText, speechError) = await _speechToTextService
@@ -122,6 +122,9 @@ class TextToSignGeneratorBloc
       );
       return;
     }
+
+    // Emit processing state for video generation
+    emit(const GeneratorProcessing());
 
     try {
       // Generate sign language video with timeout

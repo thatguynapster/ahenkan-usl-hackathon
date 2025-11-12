@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'core/di/injection_container.dart' as di;
 // import 'presentation/pages/demo_screen.dart';
-import 'presentation/pages/sign_to_text_screen.dart';
+// import 'presentation/pages/sign_to_text_screen.dart';
+import 'presentation/pages/text_to_sign_screen.dart';
 
 void main() async {
   // Ensure Flutter binding is initialized
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const SignToTextScreen(),
+      home: const TextToSignScreen(),
     );
   }
 }

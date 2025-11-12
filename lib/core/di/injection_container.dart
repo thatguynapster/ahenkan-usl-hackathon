@@ -1,13 +1,16 @@
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../data/repositories/storage_repository_impl.dart';
+import '../../data/services/sign_language_generation_service_impl.dart';
 import '../../data/services/sign_language_interpretation_service_impl.dart';
+import '../../data/services/speech_to_text_service_impl.dart';
 import '../../data/services/video_recording_service_impl.dart';
 import '../../domain/repositories/storage_repository.dart';
+import '../../domain/services/sign_language_generation_service.dart';
 import '../../domain/services/sign_language_interpretation_service.dart';
+import '../../domain/services/speech_to_text_service.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../../presentation/bloc/language_manager/language_manager_bloc.dart';
-import '../../presentation/bloc/sign_language_interpreter/sign_language_interpreter_bloc.dart';
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -37,12 +40,12 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton<SignLanguageInterpretationService>(
     () => SignLanguageInterpretationServiceImpl(),
   );
-  // sl.registerLazySingleton<SignLanguageGenerationService>(
-  //   () => SignLanguageGenerationServiceImpl(mlRepository: sl()),
-  // );
-  // sl.registerLazySingleton<SpeechToTextService>(
-  //   () => SpeechToTextServiceImpl(),
-  // );
+  sl.registerLazySingleton<SignLanguageGenerationService>(
+    () => SignLanguageGenerationServiceImpl(),
+  );
+  sl.registerLazySingleton<SpeechToTextService>(
+    () => SpeechToTextServiceImpl(),
+  );
 
   // ========== BLoCs ==========
   // Register BLoC instances as factories (new instance each time)

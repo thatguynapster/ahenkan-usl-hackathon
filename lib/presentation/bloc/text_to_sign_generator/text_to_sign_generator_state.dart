@@ -13,6 +13,11 @@ class GeneratorInitial extends TextToSignGeneratorState {
   const GeneratorInitial();
 }
 
+/// State when listening for speech input
+class GeneratorListening extends TextToSignGeneratorState {
+  const GeneratorListening();
+}
+
 /// State when video generation is in progress
 class GeneratorProcessing extends TextToSignGeneratorState {
   const GeneratorProcessing();
