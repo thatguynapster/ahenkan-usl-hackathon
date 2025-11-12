@@ -336,7 +336,8 @@
     -   Handle app pause/resume for camera and recording
     -   _Requirements: 7.4_
 
--   [ ] 22. Create end-to-end integration tests
+-   [x] 22. Create end-to-end integration tests
+
     -   Test complete sign-to-text flow with history
     -   Test complete text-to-sign flow with history
     -   Test language switching across all features
