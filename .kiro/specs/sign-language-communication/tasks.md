@@ -228,8 +228,9 @@
     -   Test video playback controls
     -   _Requirements: 4.2, 4.3, 5.3_
 
--   [ ] 15. Implement SessionManager BLoC
--   [ ] 15.1 Create SessionManagerBloc with states and events
+-   [x] 15. Implement SessionManager BLoC
+
+-   [x] 15.1 Create SessionManagerBloc with states and events
 
     -   Define SessionActive state with message list
     -   Define SessionCleared state
@@ -238,7 +239,7 @@
     -   Add timestamp to each message
     -   _Requirements: 7.1, 7.2, 7.4_
 
--   [ ] 15.2 Write unit tests for SessionManagerBloc
+-   [x] 15.2 Write unit tests for SessionManagerBloc
 
     -   Test adding messages to history
     -   Test clearing session
