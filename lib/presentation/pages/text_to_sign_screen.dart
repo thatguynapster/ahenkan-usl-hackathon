@@ -4,9 +4,12 @@ import 'package:video_player/video_player.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/utils/app_configuration.dart';
 import '../../core/utils/enums.dart';
+import '../../domain/entities/message.dart';
 import '../bloc/language_manager/language_manager_bloc.dart';
 import '../bloc/language_manager/language_manager_event.dart';
 import '../bloc/language_manager/language_manager_state.dart';
+import '../bloc/session_manager/session_manager_bloc.dart';
+import '../bloc/session_manager/session_manager_event.dart';
 import '../bloc/text_to_sign_generator/text_to_sign_generator_bloc.dart';
 import '../bloc/text_to_sign_generator/text_to_sign_generator_event.dart';
 import '../bloc/text_to_sign_generator/text_to_sign_generator_state.dart';
@@ -84,6 +87,23 @@ class _TextToSignScreenContent extends StatelessWidget {
                 ),
               ),
             );
+          } else if (state is GeneratorSuccess) {
+            // Add message to session history when video generation succeeds
+            final languageState = context.read<LanguageManagerBloc>().state;
+            final currentLanguage = languageState is LanguageSelected
+                ? languageState.language
+                : Language.english;
+
+            final message = Message(
+              id: DateTime.now().millisecondsSinceEpoch.toString(),
+              type: MessageType.textToSign,
+              content: state.inputText,
+              timestamp: DateTime.now(),
+              language: currentLanguage,
+              videoPath: state.videoPath,
+            );
+
+            context.read<SessionManagerBloc>().add(AddMessage(message));
           }
         },
         child: Column(

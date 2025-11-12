@@ -4,10 +4,13 @@ import 'package:camera/camera.dart';
 import '../../core/di/injection_container.dart';
 import '../../core/utils/enums.dart';
 import '../../data/services/video_recording_service_impl.dart';
+import '../../domain/entities/message.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../bloc/language_manager/language_manager_bloc.dart';
 import '../bloc/language_manager/language_manager_event.dart';
 import '../bloc/language_manager/language_manager_state.dart';
+import '../bloc/session_manager/session_manager_bloc.dart';
+import '../bloc/session_manager/session_manager_event.dart';
 import '../bloc/sign_language_interpreter/sign_language_interpreter_bloc.dart';
 import '../bloc/sign_language_interpreter/sign_language_interpreter_event.dart';
 import '../bloc/sign_language_interpreter/sign_language_interpreter_state.dart';
@@ -89,6 +92,22 @@ class _SignToTextScreenContent extends StatelessWidget {
                     ),
                   ),
                 );
+              } else if (state is InterpreterSuccess) {
+                // Add message to session history when interpretation succeeds
+                final languageState = context.read<LanguageManagerBloc>().state;
+                final currentLanguage = languageState is LanguageSelected
+                    ? languageState.language
+                    : Language.english;
+
+                final message = Message(
+                  id: DateTime.now().millisecondsSinceEpoch.toString(),
+                  type: MessageType.signToText,
+                  content: state.text,
+                  timestamp: DateTime.now(),
+                  language: currentLanguage,
+                );
+
+                context.read<SessionManagerBloc>().add(AddMessage(message));
               }
             },
             child: Column(

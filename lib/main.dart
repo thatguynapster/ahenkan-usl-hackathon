@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/di/injection_container.dart' as di;
+import 'core/di/injection_container.dart';
+import 'presentation/bloc/session_manager/session_manager_bloc.dart';
 // import 'presentation/pages/demo_screen.dart';
 // import 'presentation/pages/sign_to_text_screen.dart';
 import 'presentation/pages/text_to_sign_screen.dart';
@@ -19,13 +22,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Ahenkan',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
+    return BlocProvider<SessionManagerBloc>(
+      create: (context) => sl<SessionManagerBloc>(),
+      child: MaterialApp(
+        title: 'Ahenkan',
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          useMaterial3: true,
+        ),
+        home: const TextToSignScreen(),
       ),
-      home: const TextToSignScreen(),
     );
   }
 }

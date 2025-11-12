@@ -66,7 +66,7 @@ class TextToSignGeneratorBloc
           );
 
       // Emit success state
-      emit(GeneratorSuccess(videoPath: videoPath));
+      emit(GeneratorSuccess(videoPath: videoPath, inputText: event.text));
     } on TimeoutException catch (e) {
       emit(GeneratorError(e.message ?? 'Video generation timed out'));
     } catch (e) {
@@ -140,7 +140,7 @@ class TextToSignGeneratorBloc
           );
 
       // Emit success state
-      emit(GeneratorSuccess(videoPath: videoPath));
+      emit(GeneratorSuccess(videoPath: videoPath, inputText: transcribedText));
     } on TimeoutException catch (e) {
       emit(GeneratorError(e.message ?? 'Video generation timed out'));
     } catch (e) {

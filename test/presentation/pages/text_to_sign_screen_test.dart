@@ -257,7 +257,9 @@ void main() {
       const videoPath = 'https://example.com/video.mp4';
 
       await tester.pumpWidget(
-        createTestWidget(const GeneratorSuccess(videoPath: videoPath)),
+        createTestWidget(
+          const GeneratorSuccess(videoPath: videoPath, inputText: 'Test text'),
+        ),
       );
 
       expect(find.text('Video Player'), findsOneWidget);
@@ -269,7 +271,9 @@ void main() {
       const videoPath = 'https://example.com/video.mp4';
 
       await tester.pumpWidget(
-        createTestWidget(const GeneratorSuccess(videoPath: videoPath)),
+        createTestWidget(
+          const GeneratorSuccess(videoPath: videoPath, inputText: 'Test text'),
+        ),
       );
 
       final playButton = find.byKey(const Key('play_button'));

@@ -11,6 +11,7 @@ import '../../domain/services/sign_language_interpretation_service.dart';
 import '../../domain/services/speech_to_text_service.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../../presentation/bloc/language_manager/language_manager_bloc.dart';
+import '../../presentation/bloc/session_manager/session_manager_bloc.dart';
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -50,15 +51,9 @@ Future<void> initializeDependencies() async {
   // ========== BLoCs ==========
   // Register BLoC instances as factories (new instance each time)
   sl.registerFactory(() => LanguageManagerBloc(storageRepository: sl()));
-  // sl.registerFactory(
-  //   () => TextToSignGeneratorBloc(
-  //     generationService: sl(),
-  //     speechToTextService: sl(),
-  //   ),
-  // );
-  // sl.registerFactory(
-  //   () => SessionManagerBloc(),
-  // );
+
+  // Register SessionManagerBloc as singleton to share session across screens
+  sl.registerLazySingleton(() => SessionManagerBloc());
 }
 
 /// Reset all registered dependencies

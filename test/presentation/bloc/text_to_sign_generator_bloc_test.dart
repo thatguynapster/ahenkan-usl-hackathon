@@ -105,7 +105,10 @@ void main() {
         act: (bloc) => bloc.add(const GenerateFromText('Hello world')),
         expect: () => [
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/video.mp4',
+            inputText: 'Hello world',
+          ),
         ],
       );
 
@@ -140,10 +143,16 @@ void main() {
         act: (bloc) => bloc.add(
           GenerateFromText('a' * AppConfiguration.maxTextInputLength),
         ),
-        expect: () => [
-          const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/max_length_video.mp4'),
-        ],
+        expect: () {
+          final maxText = 'a' * AppConfiguration.maxTextInputLength;
+          return [
+            const GeneratorProcessing(),
+            GeneratorSuccess(
+              videoPath: '/path/to/max_length_video.mp4',
+              inputText: maxText,
+            ),
+          ];
+        },
       );
 
       blocTest<TextToSignGeneratorBloc, TextToSignGeneratorState>(
@@ -191,8 +200,12 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
+          const GeneratorListening(),
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/speech_video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/speech_video.mp4',
+            inputText: 'Hello from speech',
+          ),
         ],
       );
 
@@ -224,7 +237,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
-          const GeneratorProcessing(),
+          const GeneratorListening(),
           const GeneratorError('Speech recognition failed'),
         ],
       );
@@ -237,7 +250,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
-          const GeneratorProcessing(),
+          const GeneratorListening(),
           const GeneratorError(
             'No speech detected. Please try again and speak clearly.',
           ),
@@ -252,7 +265,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
-          const GeneratorProcessing(),
+          const GeneratorListening(),
           const GeneratorError(
             'No speech detected. Please try again and speak clearly.',
           ),
@@ -268,7 +281,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
-          const GeneratorProcessing(),
+          const GeneratorListening(),
           GeneratorError(
             'Speech is too long. Maximum ${AppConfiguration.maxTextInputLength} characters allowed.',
           ),
@@ -286,6 +299,7 @@ void main() {
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         wait: AppConfiguration.generationTimeout + const Duration(seconds: 2),
         expect: () => [
+          const GeneratorListening(),
           const GeneratorProcessing(),
           isA<GeneratorError>().having(
             (e) => e.message,
@@ -304,6 +318,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
+          const GeneratorListening(),
           const GeneratorProcessing(),
           const GeneratorError(
             'Failed to generate sign language video. Please try again.',
@@ -316,14 +331,20 @@ void main() {
       blocTest<TextToSignGeneratorBloc, TextToSignGeneratorState>(
         'should not emit state change when replaying (handled by UI)',
         build: () => bloc,
-        seed: () => const GeneratorSuccess(videoPath: '/path/to/video.mp4'),
+        seed: () => const GeneratorSuccess(
+          videoPath: '/path/to/video.mp4',
+          inputText: 'Test text',
+        ),
         act: (bloc) => bloc.add(const ReplayVideo()),
         expect: () => [],
         verify: (_) {
           // State should remain unchanged
           expect(
             bloc.state,
-            const GeneratorSuccess(videoPath: '/path/to/video.mp4'),
+            const GeneratorSuccess(
+              videoPath: '/path/to/video.mp4',
+              inputText: 'Test text',
+            ),
           );
         },
       );
@@ -349,7 +370,10 @@ void main() {
       blocTest<TextToSignGeneratorBloc, TextToSignGeneratorState>(
         'should emit GeneratorInitial when clearing from success state',
         build: () => bloc,
-        seed: () => const GeneratorSuccess(videoPath: '/path/to/video.mp4'),
+        seed: () => const GeneratorSuccess(
+          videoPath: '/path/to/video.mp4',
+          inputText: 'Test text',
+        ),
         act: (bloc) => bloc.add(const ClearGeneration()),
         expect: () => [const GeneratorInitial()],
       );
@@ -385,7 +409,10 @@ void main() {
         },
         expect: () => [
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/complete_video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/complete_video.mp4',
+            inputText: 'Complete flow test',
+          ),
           const GeneratorInitial(),
         ],
       );
@@ -404,8 +431,12 @@ void main() {
           bloc.add(const ClearGeneration());
         },
         expect: () => [
+          const GeneratorListening(),
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/speech_flow_video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/speech_flow_video.mp4',
+            inputText: 'Speech flow test',
+          ),
           const GeneratorInitial(),
         ],
       );
@@ -424,12 +455,18 @@ void main() {
         },
         expect: () => [
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/transition_video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/transition_video.mp4',
+            inputText: 'Transition test',
+          ),
         ],
         verify: (_) {
           expect(
             bloc.state,
-            const GeneratorSuccess(videoPath: '/path/to/transition_video.mp4'),
+            const GeneratorSuccess(
+              videoPath: '/path/to/transition_video.mp4',
+              inputText: 'Transition test',
+            ),
           );
         },
       );
@@ -437,7 +474,10 @@ void main() {
       blocTest<TextToSignGeneratorBloc, TextToSignGeneratorState>(
         'should transition from Success -> Initial on clear',
         build: () => bloc,
-        seed: () => const GeneratorSuccess(videoPath: '/path/to/video.mp4'),
+        seed: () => const GeneratorSuccess(
+          videoPath: '/path/to/video.mp4',
+          inputText: 'Test text',
+        ),
         act: (bloc) => bloc.add(const ClearGeneration()),
         expect: () => [const GeneratorInitial()],
         verify: (_) {
@@ -464,7 +504,10 @@ void main() {
         act: (bloc) => bloc.add(const GenerateFromText('a')),
         expect: () => [
           const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/short_video.mp4'),
+          const GeneratorSuccess(
+            videoPath: '/path/to/short_video.mp4',
+            inputText: 'a',
+          ),
         ],
       );
 
@@ -477,10 +520,16 @@ void main() {
         act: (bloc) => bloc.add(
           GenerateFromText('a' * AppConfiguration.maxTextInputLength),
         ),
-        expect: () => [
-          const GeneratorProcessing(),
-          const GeneratorSuccess(videoPath: '/path/to/max_video.mp4'),
-        ],
+        expect: () {
+          final maxText = 'a' * AppConfiguration.maxTextInputLength;
+          return [
+            const GeneratorProcessing(),
+            GeneratorSuccess(
+              videoPath: '/path/to/max_video.mp4',
+              inputText: maxText,
+            ),
+          ];
+        },
       );
 
       blocTest<TextToSignGeneratorBloc, TextToSignGeneratorState>(
@@ -505,7 +554,7 @@ void main() {
         },
         act: (bloc) => bloc.add(const GenerateFromSpeech()),
         expect: () => [
-          const GeneratorProcessing(),
+          const GeneratorListening(),
           GeneratorError(
             'Speech is too long. Maximum ${AppConfiguration.maxTextInputLength} characters allowed.',
           ),

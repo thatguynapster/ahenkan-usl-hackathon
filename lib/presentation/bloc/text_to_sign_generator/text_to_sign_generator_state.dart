@@ -26,11 +26,12 @@ class GeneratorProcessing extends TextToSignGeneratorState {
 /// State when video generation is successful
 class GeneratorSuccess extends TextToSignGeneratorState {
   final String videoPath;
+  final String inputText;
 
-  const GeneratorSuccess({required this.videoPath});
+  const GeneratorSuccess({required this.videoPath, required this.inputText});
 
   @override
-  List<Object?> get props => [videoPath];
+  List<Object?> get props => [videoPath, inputText];
 }
 
 /// State when an error occurs during generation

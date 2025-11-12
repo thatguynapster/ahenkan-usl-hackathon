@@ -273,7 +273,7 @@
     -   Test scrolling behavior
     -   _Requirements: 7.3, 7.5_
 
--   [ ] 17. Integrate session history with communication screens
+-   [x] 17. Integrate session history with communication screens
 
     -   Add message to history when sign interpretation succeeds
     -   Add message to history when sign video is generated
