@@ -6,7 +6,6 @@ import '../../core/utils/app_configuration.dart';
 import '../../core/utils/enums.dart';
 import '../../domain/entities/message.dart';
 import '../bloc/language_manager/language_manager_bloc.dart';
-import '../bloc/language_manager/language_manager_event.dart';
 import '../bloc/language_manager/language_manager_state.dart';
 import '../bloc/session_manager/session_manager_bloc.dart';
 import '../bloc/session_manager/session_manager_event.dart';
@@ -21,28 +20,26 @@ class TextToSignScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (context) =>
-              sl<LanguageManagerBloc>()..add(const LoadSavedLanguage()),
-        ),
-        BlocProvider(
-          create: (context) {
-            final languageBloc = context.read<LanguageManagerBloc>();
-            final currentLanguage = languageBloc.state is LanguageSelected
-                ? (languageBloc.state as LanguageSelected).language
-                : Language.english;
+    // LanguageManagerBloc is provided by MainNavigationScreen
+    // Listen to language changes and recreate the BLoC when language changes
+    return BlocBuilder<LanguageManagerBloc, LanguageManagerState>(
+      builder: (context, languageState) {
+        final currentLanguage = languageState is LanguageSelected
+            ? languageState.language
+            : Language.english;
 
+        return BlocProvider(
+          key: ValueKey(currentLanguage),
+          create: (context) {
             return TextToSignGeneratorBloc(
               generationService: sl(),
               speechToTextService: sl(),
               currentLanguage: currentLanguage,
             );
           },
-        ),
-      ],
-      child: const _TextToSignScreenContent(),
+          child: const _TextToSignScreenContent(),
+        );
+      },
     );
   }
 }

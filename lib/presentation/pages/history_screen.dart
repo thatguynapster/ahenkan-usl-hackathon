@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../core/di/injection_container.dart';
 import '../../core/utils/enums.dart';
 import '../../domain/entities/message.dart';
 import '../bloc/session_manager/session_manager_bloc.dart';
@@ -13,15 +12,28 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<SessionManagerBloc>()..add(const GetHistory()),
-      child: const _HistoryScreenContent(),
-    );
+    // SessionManagerBloc is provided by MainNavigationScreen
+    // Just trigger GetHistory event when screen is built
+    return const _HistoryScreenContent();
   }
 }
 
-class _HistoryScreenContent extends StatelessWidget {
+class _HistoryScreenContent extends StatefulWidget {
   const _HistoryScreenContent();
+
+  @override
+  State<_HistoryScreenContent> createState() => _HistoryScreenContentState();
+}
+
+class _HistoryScreenContentState extends State<_HistoryScreenContent> {
+  @override
+  void initState() {
+    super.initState();
+    // Trigger GetHistory event when screen is initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SessionManagerBloc>().add(const GetHistory());
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

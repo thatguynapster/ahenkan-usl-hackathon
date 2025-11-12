@@ -281,8 +281,9 @@
     -   Ensure messages include correct language and timestamp
     -   _Requirements: 7.1, 7.2_
 
--   [ ] 18. Implement navigation and mode switching
--   [ ] 18.1 Create main navigation structure
+-   [x] 18. Implement navigation and mode switching
+
+-   [x] 18.1 Create main navigation structure
 
     -   Set up bottom navigation bar or tab bar
     -   Add navigation items for Sign-to-Text, Text-to-Sign, and History
@@ -292,13 +293,13 @@
     -   Ensure navigation transitions complete within 1 second
     -   _Requirements: 6.1, 6.2, 6.4, 8.2_
 
--   [ ] 18.2 Ensure language preference persists across mode switches
+-   [x] 18.2 Ensure language preference persists across mode switches
 
     -   Verify language selection is maintained when navigating
     -   Test language preference affects both modes correctly
     -   _Requirements: 6.3_
 
--   [ ] 18.3 Write integration tests for navigation
+-   [x] 18.3 Write integration tests for navigation
 
     -   Test switching between all screens
     -   Test state preservation
