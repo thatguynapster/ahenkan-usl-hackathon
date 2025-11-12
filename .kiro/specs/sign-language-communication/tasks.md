@@ -327,7 +327,7 @@
     -   Ensure all text is readable (minimum 16sp)
     -   _Requirements: 8.1, 8.2, 8.3, 8.5_
 
--   [ ] 21. Handle app lifecycle and cleanup
+-   [x] 21. Handle app lifecycle and cleanup
 
     -   Implement proper disposal of camera resources
     -   Implement proper disposal of video player resources

@@ -12,6 +12,8 @@ import '../../domain/services/speech_to_text_service.dart';
 import '../../domain/services/video_recording_service.dart';
 import '../../presentation/bloc/language_manager/language_manager_bloc.dart';
 import '../../presentation/bloc/session_manager/session_manager_bloc.dart';
+import '../lifecycle/app_lifecycle_manager.dart';
+import '../lifecycle/video_player_manager.dart';
 
 /// Global service locator instance
 final sl = GetIt.instance;
@@ -49,11 +51,26 @@ Future<void> initializeDependencies() async {
   );
 
   // ========== BLoCs ==========
-  // Register BLoC instances as factories (new instance each time)
-  sl.registerFactory(() => LanguageManagerBloc(storageRepository: sl()));
+  // Register LanguageManagerBloc as singleton to share across app and lifecycle manager
+  sl.registerLazySingleton(() => LanguageManagerBloc(storageRepository: sl()));
 
   // Register SessionManagerBloc as singleton to share session across screens
   sl.registerLazySingleton(() => SessionManagerBloc());
+
+  // ========== Lifecycle Management ==========
+  // Register video player manager as singleton
+  sl.registerLazySingleton(() => VideoPlayerManager());
+
+  // Register lifecycle manager as singleton
+  sl.registerLazySingleton(
+    () => AppLifecycleManager(
+      videoRecordingService: sl(),
+      storageRepository: sl(),
+      languageManagerBloc: sl(),
+      sessionManagerBloc: sl(),
+      videoPlayerManager: sl(),
+    ),
+  );
 }
 
 /// Reset all registered dependencies

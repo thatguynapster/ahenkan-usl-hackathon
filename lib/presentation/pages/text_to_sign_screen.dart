@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:video_player/video_player.dart';
 import '../../core/di/injection_container.dart';
+import '../../core/lifecycle/video_player_manager.dart';
 import '../../core/utils/accessibility_utils.dart';
 import '../../core/utils/app_configuration.dart';
 import '../../core/utils/enums.dart';
@@ -550,6 +551,10 @@ class _VideoPlayerState extends State<_VideoPlayer> {
         _controller = VideoPlayerController.asset(widget.videoPath);
       }
 
+      // Register with video player manager for lifecycle management
+      final videoPlayerManager = sl<VideoPlayerManager>();
+      videoPlayerManager.registerController(_controller!);
+
       await _controller!.initialize();
       await _controller!.setLooping(false);
       await _controller!.play();
@@ -573,8 +578,13 @@ class _VideoPlayerState extends State<_VideoPlayer> {
   }
 
   void _disposeController() {
-    _controller?.dispose();
-    _controller = null;
+    if (_controller != null) {
+      // Unregister from video player manager
+      final videoPlayerManager = sl<VideoPlayerManager>();
+      videoPlayerManager.unregisterController(_controller!);
+      _controller?.dispose();
+      _controller = null;
+    }
     _isInitialized = false;
   }
 

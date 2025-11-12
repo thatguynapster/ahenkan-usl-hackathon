@@ -35,13 +35,12 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
       providers: [
         // Provide LanguageManagerBloc at the navigation level
         // so it persists across screen switches
-        BlocProvider(
-          create: (context) =>
-              sl<LanguageManagerBloc>()..add(const LoadSavedLanguage()),
+        BlocProvider.value(
+          value: sl<LanguageManagerBloc>()..add(const LoadSavedLanguage()),
         ),
         // Provide SessionManagerBloc at the navigation level
         // so history persists across screen switches
-        BlocProvider(create: (context) => sl<SessionManagerBloc>()),
+        BlocProvider.value(value: sl<SessionManagerBloc>()),
       ],
       child: Scaffold(
         body: AnimatedSwitcher(
